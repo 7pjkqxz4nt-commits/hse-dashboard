@@ -109,23 +109,129 @@ st.subheader("📊 Filtered Data")
 st.write(filtered_df.head())
 
 # ==============================
-# CHART 1 — TREND
+trend = filtered_df.groupby("Year_num").size().sort_index()
 # ==============================
+# 📈 INTERACTIVE CHARTS (PLOTLY)
+# ==============================
+import plotly.express as px
+
+# ------------------------------
+# 📈 Trend Chart
+# ------------------------------
 st.subheader("📈 Fatalities Trend (Interactive)")
 
-trend_df = trend.reset_index()
-trend_df.columns = ["Year", "Fatalities"]
+if len(trend) > 0:
+    trend_df = trend.reset_index()
+    trend_df.columns = ["Year", "Fatalities"]
 
-fig = px.line(
-    trend_df,
-    x="Year",
-    y="Fatalities",
-    markers=True,
-    title="Fatalities Over Time"
-)
+    fig = px.line(
+        trend_df,
+        x="Year",
+        y="Fatalities",
+        markers=True,
+        title="Fatalities Over Time"
+    )
 
-st.plotly_chart(fig, use_container_width=True)
-px.pie(...)
+    st.plotly_chart(fig, use_container_width=True)
+else:
+    st.warning("No data available for trend")
+
+# ------------------------------
+# 🏢 Authority Distribution
+# ------------------------------
+st.subheader("🏢 Authority Distribution")
+
+auth_df = filtered_df["Enforcing authority [Note 3]"].value_counts().reset_index()
+auth_df.columns = ["Authority", "Count"]
+
+if len(auth_df) > 0:
+    fig = px.bar(
+        auth_df,
+        x="Authority",
+        y="Count",
+        title="Fatalities by Authority"
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+else:
+    st.warning("No data available")
+
+# ------------------------------
+# 🌍 Region Distribution
+# ------------------------------
+st.subheader("🌍 Top Regions")
+
+region_df = filtered_df["Region"].value_counts().reset_index()
+region_df.columns = ["Region", "Count"]
+
+if len(region_df) > 0:
+    fig = px.bar(
+        region_df,
+        x="Region",
+        y="Count",
+        title="Fatalities by Region"
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+else:
+    st.warning("No data available")
+
+# ------------------------------
+# 🏭 Industry Distribution
+# ------------------------------
+st.subheader("🏭 Top Industries")
+
+industry_df = filtered_df["Industry"].value_counts().reset_index()
+industry_df.columns = ["Industry", "Count"]
+
+if len(industry_df) > 0:
+    fig = px.bar(
+        industry_df,
+        x="Industry",
+        y="Count",
+        title="Fatalities by Industry"
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+else:
+    st.warning("No data available")
+
+# ------------------------------
+# ⚠️ Accident Types
+# ------------------------------
+st.subheader("⚠️ Accident Types")
+
+accident_df = filtered_df["Kind of accident"].value_counts().reset_index()
+accident_df.columns = ["Accident", "Count"]
+
+if len(accident_df) > 0:
+    fig = px.bar(
+        accident_df,
+        x="Accident",
+        y="Count",
+        title="Fatalities by Accident Type"
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+else:
+    st.warning("No data available")
+
+# ------------------------------
+# 🥧 Industry Pie Chart
+# ------------------------------
+st.subheader("🥧 Industry Distribution (Pie Chart)")
+
+if len(industry_df) > 0:
+    fig = px.pie(
+        industry_df,
+        names="Industry",
+        values="Count",
+        title="Fatalities Distribution by Industry"
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+else:
+    st.warning("No data available")
 # ==============================
 # CHART 2 — AUTHORITY
 # ==============================
