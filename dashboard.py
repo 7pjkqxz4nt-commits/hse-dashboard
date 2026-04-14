@@ -1,3 +1,4 @@
+import plotly.express as px
 import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
@@ -110,72 +111,87 @@ st.write(filtered_df.head())
 # ==============================
 # CHART 1 — TREND
 # ==============================
-st.subheader("📈 Fatalities Trend")
+st.subheader("📈 Fatalities Trend (Interactive)")
 
-fig1, ax1 = plt.subplots()
-trend.plot(marker='o', ax=ax1)
-ax1.set_xlabel("Year")
-ax1.set_ylabel("Fatalities")
-ax1.grid()
+trend_df = trend.reset_index()
+trend_df.columns = ["Year", "Fatalities"]
 
-st.pyplot(fig1)
+fig = px.line(
+    trend_df,
+    x="Year",
+    y="Fatalities",
+    markers=True,
+    title="Fatalities Over Time"
+)
 
+st.plotly_chart(fig, use_container_width=True)
+px.pie(...)
 # ==============================
 # CHART 2 — AUTHORITY
 # ==============================
 st.subheader("🏢 Authority Distribution")
 
-auth = filtered_df["Enforcing authority [Note 3]"].value_counts()
+auth_df = filtered_df["Enforcing authority [Note 3]"].value_counts().reset_index()
+auth_df.columns = ["Authority", "Count"]
 
-fig2, ax2 = plt.subplots()
-auth.plot(kind='bar', ax=ax2)
-ax2.set_xlabel("Authority")
-ax2.set_ylabel("Count")
+fig = px.bar(
+    auth_df,
+    x="Authority",
+    y="Count",
+    title="Fatalities by Authority"
+)
 
-st.pyplot(fig2)
+st.plotly_chart(fig, use_container_width=True)
 
 # ==============================
 # CHART 3 — REGION
 # ==============================
-st.subheader("🌍 Top Risk Regions")
+st.subheader("🌍 Top Regions")
 
-region = filtered_df["Region"].value_counts().head(10)
+region_df = filtered_df["Region"].value_counts().reset_index()
+region_df.columns = ["Region", "Fatalities"]
 
-fig3, ax3 = plt.subplots()
-region.plot(kind='bar', ax=ax3)
-ax3.set_xlabel("Region")
-ax3.set_ylabel("Fatalities")
+fig = px.bar(
+    region_df,
+    x="Region",
+    y="Fatalities",
+    title="Fatalities by Region"
+)
 
-st.pyplot(fig3)
-
+st.plotly_chart(fig, use_container_width=True)
 # ==============================
 # CHART 4 — INDUSTRY
 # ==============================
-st.subheader("🏭 Top Industries by Fatalities")
+st.subheader("🏭 Top Industries")
 
-industry_counts = filtered_df["Industry"].value_counts().head(10)
+industry_df = filtered_df["Industry"].value_counts().reset_index()
+industry_df.columns = ["Industry", "Fatalities"]
 
-fig4, ax4 = plt.subplots()
-industry_counts.plot(kind='bar', ax=ax4)
-ax4.set_xlabel("Industry")
-ax4.set_ylabel("Fatalities")
+fig = px.bar(
+    industry_df,
+    x="Industry",
+    y="Fatalities",
+    title="Fatalities by Industry"
+)
 
-st.pyplot(fig4)
+st.plotly_chart(fig, use_container_width=True)
 
 # ==============================
 # CHART 5 — ACCIDENT TYPE
 # ==============================
-st.subheader("⚠️ Fatalities by Accident Type")
+st.subheader("⚠️ Accident Types")
 
-accident_counts = filtered_df["Kind of accident"].value_counts().head(10)
+accident_df = filtered_df["Kind of accident"].value_counts().reset_index()
+accident_df.columns = ["Accident", "Fatalities"]
 
-fig5, ax5 = plt.subplots()
-accident_counts.plot(kind='bar', ax=ax5)
-ax5.set_xlabel("Accident Type")
-ax5.set_ylabel("Fatalities")
+fig = px.bar(
+    accident_df,
+    x="Accident",
+    y="Fatalities",
+    title="Fatalities by Accident Type"
+)
 
-st.pyplot(fig5)
-
+st.plotly_chart(fig, use_container_width=True)
 # ==============================
 # AI INSIGHTS
 # ==============================
