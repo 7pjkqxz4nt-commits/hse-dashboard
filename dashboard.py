@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 # ==============================
 # LOAD DATA
 # ==============================
-df = pd.read_excel("data/fatalities.xlsx")
+df = pd.read_excel("Fatalities.xlsx")
 
 # ==============================
 # CLEAN DATA
